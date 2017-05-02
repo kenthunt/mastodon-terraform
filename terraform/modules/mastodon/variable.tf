@@ -1,5 +1,7 @@
 variable "aws_acm_certificate_arn" {}
 
+variable "aws_acm_certificate_arn_for_alb" {}
+
 variable "aws_db_instance_mastodon_instance_class" {}
 
 variable "aws_ecs_optimized_ami_ids" {
@@ -28,6 +30,8 @@ variable "aws_ecs_task_definition_mastodon_rails_puma_memory" {}
 
 variable "aws_ecs_task_definition_mastodon_rails_sidekiq_memory" {}
 
+variable "aws_elasticache_cluster_node_type" {}
+
 variable "aws_launch_configuration_mastodon_instance_type" {}
 
 variable "mastodon_aws_access_key_id" {}
@@ -49,10 +53,6 @@ variable "mastodon_email_domain_blacklist" {}
 variable "mastodon_email_domain_whitelist" {}
 
 variable "mastodon_local_domain" {}
-
-variable "mastodon_local_https" {}
-
-variable "mastodon_node_env" {}
 
 variable "mastodon_otp_secret" {}
 
@@ -106,6 +106,6 @@ variable "mastodon_node_streaming_api_base_url" {}
 
 variable "mastodon_node_streaming_cluster_num" {}
 
-variable "mastodon_node_streaming_log_level" {}
-
-variable "mastodon_node_streaming_port" {}
+variable "mastodon_node_streaming_port" {
+  default = "4000"
+}

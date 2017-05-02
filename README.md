@@ -8,7 +8,7 @@ Boilerplate for running [Mastodon](https://github.com/tootsuite/mastodon) on AWS
 └---------------┘
 ▲               ▲
 |               |
-(HTTPS)         (WebSocket)
+(HTTPS)         (WSS)
 |               |
 ▼               |
 ┌------------┐  |
@@ -24,7 +24,7 @@ Boilerplate for running [Mastodon](https://github.com/tootsuite/mastodon) on AWS
 └---------------┘
 ▲               ▲
 |               |
-(HTTP)          (WebSocket)
+(HTTP)          (WS)
 |               |
 ▼               ▼
 ┌------------------------┐
@@ -112,7 +112,7 @@ Note: this variable is not required at the 1st time because we need to create EC
 
 The domain that your Mastodon instance will run on.
 
-e.g. `example.com`
+e.g. `mastodon.example.com`
 
 ### TF_VAR_mastodon_otp_secret
 
@@ -139,10 +139,18 @@ ruby -r securerandom -e "puts SecureRandom.hex(64)"
 ### TF_VAR_aws_acm_certificate_arn
 
 If you want to use HTTPS,
-create free SSL certificate for your domain on Amazon Certificate Manager  on us-east-1 region,
+create free SSL certificate for your domain on Amazon Certificate Manager on us-east-1 region,
 then set its ARN to this environment variable.
 
 e.g. `arn:aws:acm:us-east-1:123456789012:certificate/12345678-90ab-cdef-1234-567890abcdef`
+
+### TF_VAR_aws_acm_certificate_arn_for_alb
+
+For using secure WebSocket connection,
+create free SSL certificate for your domain on Amazon Certificate Manager on your region,
+then set its ARN to this environment variable too.
+
+e.g. `arn:aws:acm:ap-northeast-1:123456789012:certificate/12345678-90ab-cdef-1234-567890abcdef`
 
 ### TF_VAR_aws_db_instance_mastodon_instance_class
 
@@ -182,6 +190,14 @@ Memory size for rails_sidekiq ECS task.
 
 default: `300`
 
+### TF_VAR_aws_elasticache_cluster_node_type
+
+AWS Elasticache Cluster node type.
+
+default: `cache.t2.micro`
+
+FYI: https://aws.amazon.com/jp/elasticache/pricing/.
+
 ### TF_VAR_aws_launch_configuration_mastodon_instance_type
 
 AWS EC2 instance type.
@@ -216,16 +232,32 @@ Default locale.
 
 default: `en`
 
+### TF_VAR_mastodon_email_domain_blacklist
+
+Email domain blacklist.
+
+### TF_VAR_mastodon_email_domain_whitelist
+
+Email domain whitelist.
+
+### TF_VAR_mastodon_node_streaming_api_base_url
+
+The base URL of Streaming API endpoint.
+
+e.g. `https://mastodon-streaming.example.com:4000`
+
+### TF_VAR_mastodon_node_streaming_cluster_num
+
+default: `1`
+
+### TF_VAR_mastodon_single_user_mode
+
+Should the instance run in single user mode? (Disable registrations, redirect to front page)
+
+default: `false`
+
 ### Others
 
-- `TF_VAR_mastodon_email_domain_blacklist`
-- `TF_VAR_mastodon_email_domain_whitelist`
-- `TF_VAR_mastodon_local_https`
-- `TF_VAR_mastodon_node_env`
-- `TF_VAR_mastodon_node_streaming_api_base_url`
-- `TF_VAR_mastodon_node_streaming_cluster_num`
-- `TF_VAR_mastodon_node_streaming_log_level`
-- `TF_VAR_mastodon_node_streaming_port`
 - `TF_VAR_mastodon_paperclip_root_path`
 - `TF_VAR_mastodon_paperclip_root_url`
 - `TF_VAR_mastodon_paperclip_secret`
@@ -237,7 +269,6 @@ default: `en`
 - `TF_VAR_mastodon_s3_hostname`
 - `TF_VAR_mastodon_s3_protocol`
 - `TF_VAR_mastodon_s3_region`
-- `TF_VAR_mastodon_single_user_mode`
 - `TF_VAR_mastodon_smtp_auth_method`
 - `TF_VAR_mastodon_smtp_delivery_method`
 - `TF_VAR_mastodon_smtp_domain`

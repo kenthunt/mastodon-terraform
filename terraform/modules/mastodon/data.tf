@@ -180,7 +180,7 @@ data "template_file" "mastodon_environment_variables_rails" {
     mastodon_email_domain_blacklist      = "${var.mastodon_email_domain_blacklist}"
     mastodon_email_domain_whitelist      = "${var.mastodon_email_domain_whitelist}"
     mastodon_local_domain                = "${var.mastodon_local_domain}"
-    mastodon_local_https                 = "${var.mastodon_local_https}"
+    mastodon_local_https                 = "${var.aws_acm_certificate_arn == "" ? "false" : "true"}"
     mastodon_otp_secret                  = "${var.mastodon_otp_secret}"
     mastodon_paperclip_root_path         = "${var.mastodon_paperclip_root_path}"
     mastodon_paperclip_root_url          = "${var.mastodon_paperclip_root_url}"
@@ -236,16 +236,8 @@ data "template_file" "mastodon_environment_variables_streaming" {
       "value": "$${mastodon_db_user}"
     },
     {
-      "name": "LOG_LEVEL",
-      "value": "$${mastodon_node_streaming_log_level}"
-    },
-    {
       "name": "NODE_ENV",
-      "value": "$${mastodon_node_env}"
-    },
-    {
-      "name": "PORT",
-      "value": "$${mastodon_node_streaming_port}"
+      "value": "production"
     },
     {
       "name": "REDIS_HOST",
@@ -259,15 +251,13 @@ data "template_file" "mastodon_environment_variables_streaming" {
   JSON
 
   vars = {
-    mastodon_db_host                  = "${aws_db_instance.mastodon.address}"
-    mastodon_db_name                  = "${aws_db_instance.mastodon.name}"
-    mastodon_db_pass                  = "${var.mastodon_db_pass}"
-    mastodon_db_port                  = "${aws_db_instance.mastodon.port}"
-    mastodon_db_user                  = "${aws_db_instance.mastodon.username}"
-    mastodon_node_streaming_log_level = "${var.mastodon_node_streaming_log_level}"
-    mastodon_node_env                 = "${var.mastodon_node_env}"
-    mastodon_node_streaming_port      = "${var.mastodon_node_streaming_port}"
-    mastodon_redis_host               = "${aws_elasticache_cluster.mastodon.cache_nodes.0.address}"
-    mastodon_redis_port               = "${aws_elasticache_cluster.mastodon.cache_nodes.0.port}"
+    mastodon_db_host             = "${aws_db_instance.mastodon.address}"
+    mastodon_db_name             = "${aws_db_instance.mastodon.name}"
+    mastodon_db_pass             = "${var.mastodon_db_pass}"
+    mastodon_db_port             = "${aws_db_instance.mastodon.port}"
+    mastodon_db_user             = "${aws_db_instance.mastodon.username}"
+    mastodon_node_streaming_port = "${var.mastodon_node_streaming_port}"
+    mastodon_redis_host          = "${aws_elasticache_cluster.mastodon.cache_nodes.0.address}"
+    mastodon_redis_port          = "${aws_elasticache_cluster.mastodon.cache_nodes.0.port}"
   }
 }

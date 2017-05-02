@@ -2,6 +2,10 @@ variable "aws_acm_certificate_arn" {
   default = ""
 }
 
+variable "aws_acm_certificate_arn_for_alb" {
+  default = ""
+}
+
 variable "aws_db_instance_mastodon_instance_class" {
   default = "db.t2.micro"
 }
@@ -24,6 +28,10 @@ variable "aws_ecs_task_definition_mastodon_rails_puma_memory" {
 
 variable "aws_ecs_task_definition_mastodon_rails_sidekiq_memory" {
   default = "300"
+}
+
+variable "aws_elasticache_cluster_node_type" {
+  default = "cache.t2.micro"
 }
 
 variable "aws_launch_configuration_mastodon_instance_type" {
@@ -65,14 +73,6 @@ variable "mastodon_email_domain_whitelist" {
 }
 
 variable "mastodon_local_domain" {}
-
-variable "mastodon_local_https" {
-  default = "false"
-}
-
-variable "mastodon_node_env" {
-  default = "production"
-}
 
 variable "mastodon_otp_secret" {}
 
@@ -151,7 +151,7 @@ variable "mastodon_smtp_login" {
 }
 
 variable "mastodon_smtp_openssl_verify_mode" {
-  default = "peer"
+  default = "none"
 }
 
 variable "mastodon_smtp_password" {
@@ -172,12 +172,4 @@ variable "mastodon_node_streaming_api_base_url" {
 
 variable "mastodon_node_streaming_cluster_num" {
   default = "1"
-}
-
-variable "mastodon_node_streaming_log_level" {
-  default = "verbose"
-}
-
-variable "mastodon_node_streaming_port" {
-  default = "4000"
 }
